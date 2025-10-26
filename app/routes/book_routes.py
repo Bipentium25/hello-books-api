@@ -23,22 +23,22 @@ def get_all_books():
         )
     return books_response
 
-# @books_bp.post("")
-# def create_book():
-#     request_body = request.get_json()
-#     title = request_body["title"]
-#     description = request_body["description"]
+@books_bp.post("")
+def create_book():
+    request_body = request.get_json()
+    title = request_body["title"]
+    description = request_body["description"]
 
-#     new_book = Book(title=title, description=description)
-#     db.session.add(new_book)
-#     db.session.commit()
+    new_book = Book(title=title, description=description)
+    db.session.add(new_book)
+    db.session.commit()
 
-#     response = {
-#         "id": new_book.id,
-#         "title": new_book.title,
-#         "description": new_book.description,
-#     }
-#     return response, 201
+    response = {
+        "id": new_book.id,
+        "title": new_book.title,
+        "description": new_book.description,
+    }
+    return response, 201
 
 # @books_bp.get("")
 # def get_all_books():
