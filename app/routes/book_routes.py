@@ -5,23 +5,7 @@ from app.models.book import Book
 from ..db import db
 
 books_bp = Blueprint("books_bp", __name__, url_prefix="/books")
-@books_bp.get("")
-def get_all_books():
-    query = db.select(Book).order_by(Book.id)
-    books = db.session.scalars(query)
-    # We could also write the line above as:
-    # books = db.session.execute(query).scalars()
 
-    books_response = []
-    for book in books:
-        books_response.append(
-            {
-                "id": book.id,
-                "title": book.title,
-                "description": book.description
-            }
-        )
-    return books_response
 
 @books_bp.post("")
 def create_book():
@@ -77,40 +61,37 @@ def update_book(book_id):
 
     return Response(status=204, mimetype="application/json")
 
-# @books_bp.get("")
-# def get_all_books():
-#     books_response = []
-#     for book in books:
-#         books_response.append(
-#             {
-#                 "id": book.id,
-#                 "title": book.title,
-#                 "description": book.description
-#             }
-#         )
-#     return books_response
+
+@books_bp.delete("/<book_id>")
+def delete_book(book_id):
+    book = validate_book(book_id)
+    db.session.delete(book)
+    db.session.commit()
+
+    return Response(status=204, mimetype="application/json")
 
 
-# def validate_book(book_id):
-#     try:
-#         book_id = int(book_id)
-#     except:
-#         response = {"message": f"book {book_id} invalid"}
-#         abort(make_response(response, 400))
+@books_bp.get("")
+def get_all_books():
+    query = db.select(Book)
 
-#     for book in books:
-#         if book.id == book_id:
-#             return book
+    title_param = request.args.get("title")
+    if title_param:
+        query = query.where(Book.title.ilike(f"%{title_param}%"))
 
-#     response = {"message": f"book {book_id} not found"}
-#     abort(make_response(response, 404))
+    description_param = request.args.get("description")
+    if description_param:
+        query = query.where(Book.description.ilike(f"%{description_param}%"))
 
-# @books_bp.get("/<book_id>")
-# def get_one_book(book_id):
-#     book = validate_book(book_id)
-
-#     return {
-#         "id": book.id,
-#         "title": book.title,
-#         "description": book.description,
-#     }
+    query = query.order_by(Book.id)
+    books = db.session.scalars(query)
+    books_response = []
+    for book in books:
+        books_response.append(
+            {
+                "id": book.id,
+                "title": book.title,
+                "description": book.description
+            }
+        )
+    return books_response
