@@ -1,6 +1,6 @@
 # # book_routes.py
 
-from flask import Blueprint, abort, make_response, request
+from flask import Blueprint, abort, make_response, request, Response
 from app.models.book import Book
 from ..db import db
 
@@ -85,6 +85,7 @@ def get_all_books():
 
     query = query.order_by(Book.id)
     books = db.session.scalars(query)
+    
     books_response = []
     for book in books:
         books_response.append(
