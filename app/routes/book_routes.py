@@ -24,6 +24,8 @@ def create_book():
     }
     return response, 201
 
+
+
 @books_bp.get("/<book_id>")
 def get_one_book(book_id):
     book = validate_book(book_id)
@@ -70,6 +72,11 @@ def delete_book(book_id):
 
     return Response(status=204, mimetype="application/json")
 
+
+
+# @books_bp.get("")
+# def get_all_books():
+#     return make_response("I'm a teapot!", 418)
 
 @books_bp.get("")
 def get_all_books():
