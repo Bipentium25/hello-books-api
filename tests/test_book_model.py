@@ -1,5 +1,6 @@
 from app.models.book import Book
 import pytest
+from werkzeug.exceptions import HTTPException
 
 def test_from_dict_returns_book():
     # Arrange
@@ -107,4 +108,5 @@ def test_to_dict_missing_description():
     assert result["id"] == 1
     assert result["title"] == "Ocean Book"
     assert result["description"] is None
+
 
