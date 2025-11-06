@@ -1,12 +1,11 @@
 # # book_routes.py
 
-from flask import Blueprint, request, Response
+from flask import Blueprint, abort, make_response, request, Response
 from app.models.book import Book
 from ..db import db
-from .route_utilities import create_model, validate_model,get_models_with_filters
+from .route_utilities import validate_model , create_model, get_models_with_filters
 
 bp = Blueprint("books_bp", __name__, url_prefix="/books")
-
 
 @bp.post("")
 def create_book():
@@ -39,12 +38,6 @@ def delete_book(book_id):
     db.session.commit()
 
     return Response(status=204, mimetype="application/json")
-
-
-
-# @books_bp.get("")
-# def get_all_books():
-#     return make_response("I'm a teapot!", 418)
 
 
 @bp.get("")

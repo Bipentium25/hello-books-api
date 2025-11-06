@@ -1,10 +1,10 @@
-# app/models/book.py
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import ForeignKey
 from typing import Optional
 from ..db import db
-
 class Book(db.Model):
+    __tablename__ = "book"  # ← add this line
+
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     title: Mapped[str]
     description: Mapped[str]
